@@ -103,11 +103,12 @@ public class Game {
 		for (int i = 1; i < topCardList.size(); i++) {
 			if (!isTheCardHigher(topCardList.get(tempIndex), topCardList.get(i))) {
 				tempIndex = i;
-			//	System.out.println("The highest card is index [" + tempIndex + "] " + topCardList.get(tempIndex) + ".");
+				// System.out.println("The highest card is index [" + tempIndex + "] " +
+				// topCardList.get(tempIndex) + ".");
 			}
-		//	System.out.println("The highest card is index [" + tempIndex + "] " + topCardList.get(tempIndex) + ".");
+			System.out.println("The highest card is index [" + tempIndex + "] " + topCardList.get(tempIndex) + ".");
 		}
-			System.out.println("2nd The highest card is " + topCardList.get(tempIndex) + ".");
+		System.out.println("2nd The highest card is " + topCardList.get(tempIndex) + ".");
 		return tempIndex;
 	}
 
@@ -148,11 +149,11 @@ public class Game {
 			topCardList = getTheTopCard(playerList);
 			System.out.println("Top cards: " + topCardList);
 			int winnerIndex = findTheHighestCard(topCardList);
-			playerList.get(winnerIndex).getPlayerCards().addAll(topCardList);
+			// playerList.get(winnerIndex).getPlayerCards().addAll(topCardList);
 			System.out.println(
 					"The winner for Round # " + round + " is " + playerList.get(winnerIndex).getPlayerName() + ".");
 			System.out.println("====================");
-			topCardList.clear();
+			// topCardList.clear();
 
 			for (int i = 0; i < playerList.size(); i++) {
 				if (playerList.get(i).getPlayerCards().isEmpty()) {
@@ -161,10 +162,33 @@ public class Game {
 				}
 			}
 
+			playerList.get(winnerIndex).getPlayerCards().addAll(addCardToWinner(winnerIndex, topCardList));
+			topCardList.clear();
 			round++;
 		} while (playerList.size() > 1);
 		System.out.println("Game Over...  The winner is " + playerList.get(0).getPlayerName() + "."
 				+ "\nWinning Deck : " + playerList.get(0).getPlayerCards());
+	}
+
+	private static LinkedList<Card> addCardToWinner(int winnerIndex, LinkedList<Card> topCardList) {
+
+		int i = winnerIndex;
+		LinkedList<Card> sortedList = new LinkedList<>();
+
+		while (i < topCardList.size()) {
+
+			sortedList.add(topCardList.get(i++));
+
+		}
+
+		i = 0;
+
+		while (i < winnerIndex) {
+
+			sortedList.add(topCardList.get(i++));
+		}
+		
+		return sortedList;
 	}
 
 	public static void start() throws FileNotFoundException {
