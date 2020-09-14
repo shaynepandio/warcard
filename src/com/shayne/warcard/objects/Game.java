@@ -59,22 +59,20 @@ public class Game {
 	}
 
 	public static void giveCardToPlayer(LinkedList<Player> playerList, LinkedList<Card> shuffledDeck) {
-		int playerNum = 0;
 
 		do {
-			if (playerNum != playerList.size()) {
-				for (playerNum = 0; playerNum < playerList.size(); playerNum++) {
-					playerList.get(playerNum).getPlayerCards().add(shuffledDeck.getFirst());
-					if (shuffledDeck.isEmpty()) {
-						break;
-					}
+			for (int i = 0; i < playerList.size(); i++) {
+				if (shuffledDeck.isEmpty()) {
+					break;
+				} else {
+					playerList.get(i).getPlayerCards().add(shuffledDeck.removeFirst());
 				}
 			}
 		} while (!shuffledDeck.isEmpty());
 
 		System.out.println("INITIAL DECK:");
 		for (Player player : playerList) {
-			System.out.println("Player" + player.getPlayerName() + ": " + player.getPlayerCards());
+			System.out.println(player.getPlayerName() + ": " + player.getPlayerCards());
 		}
 	}
 
@@ -88,22 +86,28 @@ public class Game {
 	}
 
 	public static boolean isTheCardHigher(Card c1, Card c2) {
-		if (c1.getRank().getRankValue() == c2.getRank().getRankValue()) { 
-			return c1.getSuit().getSuitValue() > c2.getSuit().getSuitValue(); 
+		if (c1.getSuit().getSuitValue() > c2.getSuit().getSuitValue()) {
+			return true;
+		} else if (c1.getSuit().getSuitValue() == c2.getSuit().getSuitValue()) {
+			return c1.getRank().getRankValue() > c2.getRank().getRankValue();
+		} else {
+			return false;
 		}
-		return false;
+
 	}
 
 	public static int findTheHighestCard(LinkedList<Card> topCardList) {
 
 		int tempIndex = 0;
 
-		for (int i = 0; i < topCardList.size(); i++) {
-			if (isTheCardHigher(topCardList.get(tempIndex), topCardList.get(i)))
-				;
-			tempIndex = i;
+		for (int i = 1; i < topCardList.size(); i++) {
+			if (!isTheCardHigher(topCardList.get(tempIndex), topCardList.get(i))) {
+				tempIndex = i;
+			//	System.out.println("The highest card is index [" + tempIndex + "] " + topCardList.get(tempIndex) + ".");
+			}
+		//	System.out.println("The highest card is index [" + tempIndex + "] " + topCardList.get(tempIndex) + ".");
 		}
-		System.out.println("The highest card is " + tempIndex);
+			System.out.println("2nd The highest card is " + topCardList.get(tempIndex) + ".");
 		return tempIndex;
 	}
 
@@ -135,38 +139,38 @@ public class Game {
 		int round = 1;
 		LinkedList<Card> topCardList = new LinkedList<>();
 
-		System.out.println("WarCard");
-
-		GameDetails.setTheGame();
-
-		while (playerList.size() > 1) {
+		do {
 			System.out.println("Round " + round);
 			System.out.println("====================");
+			for (Player player : playerList) {
+				System.out.println(player.getPlayerName() + ": " + player.getPlayerCards());
+			}
 			topCardList = getTheTopCard(playerList);
 			System.out.println("Top cards: " + topCardList);
 			int winnerIndex = findTheHighestCard(topCardList);
 			playerList.get(winnerIndex).getPlayerCards().addAll(topCardList);
-			System.out.println("The winner for Round # " + round + "is " + playerList.get(winnerIndex).getPlayerName());
+			System.out.println(
+					"The winner for Round # " + round + " is " + playerList.get(winnerIndex).getPlayerName() + ".");
 			System.out.println("====================");
 			topCardList.clear();
 
 			for (int i = 0; i < playerList.size(); i++) {
 				if (playerList.get(i).getPlayerCards().isEmpty()) {
 					playerList.remove(i);
+					i = 0;
 				}
-
-			round++;
 			}
 
-			System.out.println("Game Over...  \n Winning Deck : \n");
-			System.out.println("Player " + playerList.get(0).getPlayerName() + playerList.get(0).getPlayerCards());
-		}
+			round++;
+		} while (playerList.size() > 1);
+		System.out.println("Game Over...  The winner is " + playerList.get(0).getPlayerName() + "."
+				+ "\nWinning Deck : " + playerList.get(0).getPlayerCards());
 	}
 
 	public static void start() throws FileNotFoundException {
-		
+
 		System.out.println("Welcome to WarCard \n");
-				
+
 		GameDetails.setTheGame();
-}
+	}
 }

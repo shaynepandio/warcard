@@ -8,8 +8,12 @@ public class Player {
 	private List<Card> playerCards;
 	
 	public Player(String data) {
-		this.playerName = "playerName";
+		this.playerName = data;
 		this.playerCards = new LinkedList<Card>();
+	}
+	
+	public Player(int playerNum) {
+		this.playerName = String.valueOf(playerNum + 1);
 	}
 
 	public String getPlayerName() {	
@@ -22,7 +26,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [playerName= " + playerName + ", playerCards= " + playerCards + "]";
+		return playerName;
 	}
 	
 }
