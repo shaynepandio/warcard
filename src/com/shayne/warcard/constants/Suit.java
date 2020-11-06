@@ -1,4 +1,4 @@
-package com.shayne.warcard.objects;
+package com.shayne.warcard.constants;
 
 public enum Suit {
 	DIAMOND(4, "D"),

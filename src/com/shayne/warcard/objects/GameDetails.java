@@ -2,15 +2,19 @@ package com.shayne.warcard.objects;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class GameDetails {
-	private static Scanner sc = new Scanner(System.in);
-	private static int numOfShuffle = 0;
-	private static int numOfPlayers = 0;
+import com.shayne.warcard.constants.Rank;
+import com.shayne.warcard.constants.Suit;
 
-	public static LinkedList<Card> createDeck() {
+public class GameDetails {
+	private Scanner sc = new Scanner(System.in);
+	private int numOfShuffle = 0;
+	private int numOfPlayers = 0;
+
+	public LinkedList<Card> createDeck() {
 
 		LinkedList<Card> deck = new LinkedList<>();
 		boolean hasTokenized = false;
@@ -32,8 +36,8 @@ public class GameDetails {
 					String[] cardFiles = cardFile.split(",");
 					for (String cardData : cardFiles) {
 						String pair[] = cardData.split("-");
-						Suit suit = Game.findSuit(pair[0]);
-						Rank rank = Game.findRank(pair[1]);
+						Suit suit = findSuit(pair[0]);
+						Rank rank = findRank(pair[1]);
 
 						Card card = new Card();
 						card.setSuit(suit);
@@ -43,33 +47,153 @@ public class GameDetails {
 					}
 				}
 			} else {
-				System.out.println("Please enter input file path again: ");
+				// System.out.println("Please enter input file path again: ");
 				sc.nextLine();
 			}
 		} while (!hasTokenized);
-		sc.close();
+//		sc.close();
 		return deck;
 	}
 
-	public static void setTheGame() throws FileNotFoundException {
+	public LinkedList<Player> setTheGame() throws FileNotFoundException {
 
-		LinkedList<Card> deck = GameDetails.createDeck();
+		LinkedList<Card> deck = createDeck();
 		LinkedList<Card> newShuffledDeck = new LinkedList<>();
+		boolean flag = false;
+		Scanner sc = new Scanner(System.in);
 
-		numOfShuffle = Game.inputGameData("shuffle", 0, 7);
-		if(numOfShuffle == 0) {
-			newShuffledDeck = deck;
-		}else {
-		newShuffledDeck = Game.shuffleDeck(numOfShuffle, deck);
-		}
-		
+		do {
+			System.out.println("Select type of shuffle: \n [1] Random Shuffle \n [2] Faroshuffle");
+
+			if (sc.hasNextInt()) {
+				int num = sc.nextInt();
+				if (num == 1) {
+					newShuffledDeck = deck;
+					Collections.shuffle(newShuffledDeck);
+					flag = true;
+				} else if (num == 2) {
+					numOfShuffle = inputGameData("shuffle", 0, 7);
+					if (numOfShuffle == 0) {
+						newShuffledDeck = deck;
+						flag = true;
+					} else {
+						newShuffledDeck = shuffleDeck(numOfShuffle, deck);
+						flag = true;
+					}
+				} else {
+					System.out.println("Input must be 1 or 2 only.");
+				}
+			} else {
+				sc.nextLine();
+				System.out.println("Wrong input.");
+			}
+		} while (!flag);
+
 		System.out.println("SHUFFLED DECK:");
 		System.out.println(newShuffledDeck);
 
-		numOfPlayers = Game.inputGameData("players", 2, 52);
-		LinkedList<Player> playerList = Game.addPlayer(numOfPlayers);
-		Game.giveCardToPlayer(playerList, newShuffledDeck);
-		Game.playGame(numOfPlayers, playerList);
+		numOfPlayers = inputGameData("players", 2, 52);
+		LinkedList<Player> playerList = addPlayer(numOfPlayers);
+		giveCardToPlayer(playerList, newShuffledDeck);
+
+		sc.close();
+		return playerList;
+	}
+
+	public LinkedList<Card> shuffleDeck(int numOfShuffle, LinkedList<Card> deck) {
+		LinkedList<Card> temporaryDeck = new LinkedList<>();
+		LinkedList<Card> shuffledDeck = new LinkedList<>();
+
+		temporaryDeck.addAll(deck);
+
+		int shuffleMade = 0;
+		while (shuffleMade < numOfShuffle) {
+
+			shuffledDeck = new LinkedList<Card>();
+
+			int half = deck.size() / 2;
+			for (int i = 0; i < half; i++) {
+				shuffledDeck.add(temporaryDeck.get(i));
+				shuffledDeck.add(temporaryDeck.get(i + half));
+			}
+			temporaryDeck.clear();
+			temporaryDeck.addAll(shuffledDeck);
+			shuffleMade++;
+		}
+		return shuffledDeck;
+	}
+
+	public LinkedList<Player> addPlayer(int numOfPlayers) {
+		LinkedList<Player> playerList = new LinkedList<>();
+		for (int i = 0; i < numOfPlayers; i++) {
+			playerList.add(new Player("Player " + (i + 1) + ""));
+			System.out.println("Added Player [" + (i + 1) + "]");
+		}
+		return playerList;
+	}
+
+	public void giveCardToPlayer(LinkedList<Player> playerList, LinkedList<Card> shuffledDeck) {
+
+		do {
+			for (int i = 0; i < playerList.size(); i++) {
+				if (shuffledDeck.isEmpty()) {
+					break;
+				} else {
+					playerList.get(i).getPlayerCards().add(shuffledDeck.removeFirst());
+				}
+			}
+		} while (!shuffledDeck.isEmpty());
+
+		System.out.println("INITIAL DECK:");
+		for (Player player : playerList) {
+			System.out.println(player.getPlayerName() + ": " + player.getPlayerCards());
+		}
+	}
+
+	public int inputGameData(String input, int min, int max) {
+
+		Scanner sc = new Scanner(System.in);
+
+		boolean isCorrect = false;
+		int value = 0;
+
+		do {
+			System.out.println("Please enter number of " + input + " between [" + min + "-" + max + "] :");
+			if (sc.hasNextInt()) {
+				value = sc.nextInt();
+				sc.nextLine();
+				if (value >= min && value <= max) {
+					isCorrect = true;
+				} else {
+					System.out.println("Invalid input. Please enter between" + "[" + min + "-" + max + "] :");
+				}
+			} else {
+				sc.nextLine();
+				System.out.println("Invalid input. Input must be an integer.");
+			}
+		} while (!isCorrect);
+
+		sc.close();
+		return value;
+
+	}
+	
+	public Suit findSuit(String suitName) {
+		for (Suit suit : Suit.values()) {
+			if (suit.getSuitName().equals(suitName)) {
+				return suit;
+			}
+		}
+		return null;
+	}
+
+	public Rank findRank(String rankName) {
+		for (Rank rank : Rank.values()) {
+			if (rank.getRankName().equals(rankName)) {
+				return rank;
+			}
+		}
+		return null;
 	}
 
 }

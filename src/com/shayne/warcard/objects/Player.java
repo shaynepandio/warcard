@@ -11,10 +11,6 @@ public class Player {
 		this.playerName = data;
 		this.playerCards = new LinkedList<Card>();
 	}
-	
-	public Player(int playerNum) {
-		this.playerName = String.valueOf(playerNum + 1);
-	}
 
 	public String getPlayerName() {	
 		return playerName;

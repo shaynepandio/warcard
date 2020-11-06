@@ -1,4 +1,4 @@
-package com.shayne.warcard.objects;
+package com.shayne.warcard.constants;
 
 public enum Rank {
 	ACE(14, "A"),

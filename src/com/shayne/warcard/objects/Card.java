@@ -1,5 +1,8 @@
 package com.shayne.warcard.objects;
 
+import com.shayne.warcard.constants.Rank;
+import com.shayne.warcard.constants.Suit;
+
 public class Card {
 	private Rank rank;
 	private Suit suit;
@@ -25,10 +28,6 @@ public class Card {
 
 	@Override
 	public String toString() {
-//		return this.suit + "-" + this.rank + " " +
-//		 "Suit value = " + this.suit + " " +
-//		 "Rank value = " + this.rank;
-		
 		return "[" + this.suit + "-" + this.rank + "]";
  }
 }
