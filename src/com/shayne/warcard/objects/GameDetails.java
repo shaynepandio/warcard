@@ -46,12 +46,12 @@ public class GameDetails {
 						hasTokenized = true;
 					}
 				}
-			} else {
-				// System.out.println("Please enter input file path again: ");
-				sc.nextLine();
 			}
+//			} else {
+//				System.out.println("Please enter input file path again: ");
+//				sc.nextLine();
+//			}
 		} while (!hasTokenized);
-//		sc.close();
 		return deck;
 	}
 
