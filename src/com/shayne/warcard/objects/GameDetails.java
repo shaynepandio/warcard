@@ -46,11 +46,10 @@ public class GameDetails {
 						hasTokenized = true;
 					}
 				}
+			} else {
+				System.out.println("Please enter input file path again: ");
+				sc.nextLine();
 			}
-//			} else {
-//				System.out.println("Please enter input file path again: ");
-//				sc.nextLine();
-//			}
 		} while (!hasTokenized);
 		return deck;
 	}
@@ -177,7 +176,7 @@ public class GameDetails {
 		return value;
 
 	}
-	
+
 	public Suit findSuit(String suitName) {
 		for (Suit suit : Suit.values()) {
 			if (suit.getSuitName().equals(suitName)) {
