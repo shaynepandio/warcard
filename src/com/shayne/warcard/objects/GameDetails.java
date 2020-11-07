@@ -18,20 +18,14 @@ public class GameDetails {
 
 		LinkedList<Card> deck = new LinkedList<>();
 		boolean hasTokenized = false;
+		Scanner scanner = null;
 
-		do {
-			System.out.println("Please enter input file path: ");
-
-			String file = sc.nextLine();
-			File inputFile = new File(file); // File inputFile = new File("C:\\Users\\Susan\\Desktop\\input.txt");\
+		File file = new File("src/input.txt");
+		if (file.exists()) {
 			try {
-				sc = new Scanner(inputFile);
-			} catch (FileNotFoundException e) {
-				System.out.println("File not found.");
-			}
-			if (inputFile.exists()) {
-				while (sc.hasNextLine()) {
-					String cardFile = sc.nextLine();
+				scanner = new Scanner(file);
+				while (scanner.hasNextLine()) {
+					String cardFile = scanner.nextLine();
 
 					String[] cardFiles = cardFile.split(",");
 					for (String cardData : cardFiles) {
@@ -46,20 +40,50 @@ public class GameDetails {
 						hasTokenized = true;
 					}
 				}
-			} else {
-				System.out.println("Please enter input file path again: ");
-				sc.nextLine();
+			} catch (FileNotFoundException e) {
+
 			}
-		} while (!hasTokenized);
+		} else {
+			do {
+				System.out.println("Please enter input file path: ");
+				String file1 = sc.nextLine();
+				File inputFile = new File(file1); // File inputFile = new File("C:\\Users\\Susan\\Desktop\\input.txt");\
+				try {
+					scanner = new Scanner(inputFile);
+					if (inputFile.exists()) {
+						while (scanner.hasNextLine()) {
+							String cardFile = scanner.nextLine();
+							String[] cardFiles = cardFile.split(",");
+							for (String cardData : cardFiles) {
+								String pair[] = cardData.split("-");
+								Suit suit = findSuit(pair[0]);
+								Rank rank = findRank(pair[1]);
+
+								Card card = new Card();
+								card.setSuit(suit);
+								card.setRank(rank);
+								deck.add(card);
+								hasTokenized = true;
+							}
+						}
+					}
+				} catch (FileNotFoundException e) {
+					System.out.println("File not found.");
+				}
+			} while (!hasTokenized);
+		}
+		
+		scanner.close();
+		System.out.println("Initial deck: \n" + deck);
 		return deck;
 	}
+
 
 	public LinkedList<Player> setTheGame() throws FileNotFoundException {
 
 		LinkedList<Card> deck = createDeck();
 		LinkedList<Card> newShuffledDeck = new LinkedList<>();
 		boolean flag = false;
-		Scanner sc = new Scanner(System.in);
 
 		do {
 			System.out.println("Select type of shuffle: \n [1] Random Shuffle \n [2] Faroshuffle");
@@ -151,7 +175,6 @@ public class GameDetails {
 
 	public int inputGameData(String input, int min, int max) {
 
-		Scanner sc = new Scanner(System.in);
 
 		boolean isCorrect = false;
 		int value = 0;
@@ -167,12 +190,11 @@ public class GameDetails {
 					System.out.println("Invalid input. Please enter between" + "[" + min + "-" + max + "] :");
 				}
 			} else {
-				sc.nextLine();
 				System.out.println("Invalid input. Input must be an integer.");
+				sc.nextLine();
 			}
 		} while (!isCorrect);
 
-		sc.close();
 		return value;
 
 	}
