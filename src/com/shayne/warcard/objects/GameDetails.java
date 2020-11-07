@@ -187,7 +187,7 @@ public class GameDetails {
 				if (value >= min && value <= max) {
 					isCorrect = true;
 				} else {
-					System.out.println("Invalid input. Please enter between" + "[" + min + "-" + max + "] :");
+					System.out.println("Invalid input. Please enter between " + "[" + min + "-" + max + "].");
 				}
 			} else {
 				System.out.println("Invalid input. Input must be an integer.");
