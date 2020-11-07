@@ -31,8 +31,6 @@ public class Game {
 		for (int i = 1; i < topCardList.size(); i++) {
 			if (!isTheCardHigher(topCardList.get(tempIndex), topCardList.get(i))) {
 				tempIndex = i;
-				// System.out.println("The highest card is index [" + tempIndex + "] " +
-				// topCardList.get(tempIndex) + ".");
 			}
 			System.out.println("The highest card is " + topCardList.get(tempIndex) + ".");
 		}
@@ -74,14 +72,10 @@ public class Game {
 			topCardList = getTheTopCard(playerList);
 			System.out.println("Top cards: " + topCardList);
 			int winnerIndex = findTheHighestCard(topCardList);
-			// playerList.get(winnerIndex).getPlayerCards().addAll(topCardList);
 			System.out.println(
 					"The winner for Round # " + round + " is " + playerList.get(winnerIndex).getPlayerName() + ".");
 
-			System.out.println(winnerIndex);
-
 			System.out.println("====================");
-			// topCardList.clear();
 			playerList.get(winnerIndex).getPlayerCards().addAll(addCardToWinner(winnerIndex, topCardList));
 
 			for (int i = 0; i < playerList.size(); i++) {
