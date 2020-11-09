@@ -14,11 +14,11 @@ public class Game {
 		return topCardList;
 	}
 
-	public boolean isTheCardHigher(Card c1, Card c2) {
-		if (c1.getSuit().getSuitValue() > c2.getSuit().getSuitValue()) {
+	public boolean isCardHigher(Card c1, Card c2) {
+		if(c1.getRank().getRankValue() > c2.getRank().getRankValue()) {
 			return true;
-		} else if (c1.getSuit().getSuitValue() == c2.getSuit().getSuitValue()) {
-			return c1.getRank().getRankValue() > c2.getRank().getRankValue();
+		} else if (c1.getRank().getRankValue() == c2.getRank().getRankValue()) {
+			return c1.getSuit().getSuitValue() > c2.getSuit().getSuitValue();
 		} else {
 			return false;
 		}
@@ -29,7 +29,11 @@ public class Game {
 		int tempIndex = 0;
 
 		for (int i = 1; i < topCardList.size(); i++) {
-			if (!isTheCardHigher(topCardList.get(tempIndex), topCardList.get(i))) {
+			
+			// if c1 > c2 = true; 
+			
+			
+			if (!isCardHigher(topCardList.get(tempIndex), topCardList.get(i))) {
 				tempIndex = i;
 			}
 			System.out.println("The highest card is " + topCardList.get(tempIndex) + ".");

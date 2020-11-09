@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Player {
 	private String playerName;
-	private List<Card> playerCards;
+	private LinkedList<Card> playerCards;
 	
 	public Player(String data) {
 		this.playerName = data;
@@ -16,7 +16,7 @@ public class Player {
 		return playerName;
 	}
 
-	public List<Card> getPlayerCards() {
+	public LinkedList<Card> getPlayerCards() {
 		return playerCards;
 	}
 
