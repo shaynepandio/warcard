@@ -162,7 +162,7 @@ public class GameDetails {
 				if (shuffledDeck.isEmpty()) {
 					break;
 				} else {
-					playerList.get(i).getPlayerCards().add(shuffledDeck.removeFirst());
+					playerList.get(i).getPlayerCards().addFirst(shuffledDeck.removeFirst());
 				}
 			}
 		} while (!shuffledDeck.isEmpty());
@@ -171,6 +171,7 @@ public class GameDetails {
 		for (Player player : playerList) {
 			System.out.println(player.getPlayerName() + ": " + player.getPlayerCards());
 		}
+		System.out.println();
 	}
 
 	public int inputGameData(String input, int min, int max) {
